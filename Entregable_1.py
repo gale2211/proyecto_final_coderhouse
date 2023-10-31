@@ -78,7 +78,7 @@ def connect_to_db(conn_string):
 
 # Cargar las credenciales en una variable
 config = ConfigParser()
-config_dir = '/Users/guillermoale/Desktop/Curso Data Engineer/Entregable 1/config.ini'
+config_dir = 'config.ini'
 config.read(config_dir)
 
 # Conseguimos la key temporal
@@ -143,7 +143,7 @@ new_df['links'] = new_df['links'].apply(json.dumps)
 
 # DATA A REDSHIFT
 #CONEXION A LA BASE DE DATOS DE REDSHIFT
-config_dir = '/Users/guillermoale/Desktop/Curso Data Engineer/Entregable 1/config.ini'
+#config_dir = '/Users/guillermoale/Desktop/Curso Data Engineer/Entregable 1/config.ini'
 conn_str = build_conn_string(config_dir, 'redshift')
 conn, engine = connect_to_db(conn_str)
 # 
