@@ -35,15 +35,17 @@ Se utilizó la base de datos entregada por la cátedra de CoderHouse llamada "da
 
 Un ejemplo de SQL para obtener la información de la tabla sería:
 
-select * from "data-engineer-database".guilleale22_coderhouse.artistas_top_50_global
-
+```sql
+select *
+from "data-engineer-database".guilleale22_coderhouse.artistas_top_50_global
+```
 ## Sort y Dist Keys
-Dist key: La clave de distribución determina cómo se distribuyen los datos en las filas entre los nodos de almacenamiento de Amazon Redshift. Al elegir una columna como clave de distribución, mejora la eficiencia de las consultas al distribuir los datos de manera que las filas relacionadas se almacenen en el mismo nodo o en nodos cercanos. Es recomendable seleccionar una columna que se utilice frecuentemente en las cláusulas WHERE de tus consultas. Dicho esto, se eligió la columna de followers como dist key ya que es probable que me puedan interesar análisis agrupados sobre la cantidad de seguidores o artistas con cantidad de seguidores similares. 
+**Dist key:** La clave de distribución determina cómo se distribuyen los datos en las filas entre los nodos de almacenamiento de Amazon Redshift. Al elegir una columna como clave de distribución, mejora la eficiencia de las consultas al distribuir los datos de manera que las filas relacionadas se almacenen en el mismo nodo o en nodos cercanos. Es recomendable seleccionar una columna que se utilice frecuentemente en las cláusulas WHERE de tus consultas. Dicho esto, se eligió la columna de followers como dist key ya que es probable que me puedan interesar análisis agrupados sobre la cantidad de seguidores o artistas con cantidad de seguidores similares. 
 
-Sort Key: La clave de ordenación determina el orden físico de las filas dentro de cada bloque de datos en el almacenamiento. Al elegir una como clave de ordenación, puedo acelerar las consultas que realizan operaciones de ordenación o búsquedas en esas columnas. Me resultó conveniente entonces elegir la columna de popularity como clave de ordenación, ya que dicha columna determina que tan popular es un artista segun las reproducciones. 
+**Sort Key:** La clave de ordenación determina el orden físico de las filas dentro de cada bloque de datos en el almacenamiento. Al elegir una como clave de ordenación, puedo acelerar las consultas que realizan operaciones de ordenación o búsquedas en esas columnas. Me resultó conveniente entonces elegir la columna de popularity como clave de ordenación, ya que dicha columna determina que tan popular es un artista segun las reproducciones. 
 
 ## Codigo DDL de la tabla
-
+```sql
 CREATE TABLE IF NOT EXISTS guilleale22_coderhouse.artistas_top_50_global
 (
 	artist_id VARCHAR(256)   ENCODE lzo
@@ -56,3 +58,4 @@ CREATE TABLE IF NOT EXISTS guilleale22_coderhouse.artistas_top_50_global
 DISTSTYLE AUTO
 ;
 ALTER TABLE guilleale22_coderhouse.artistas_top_50_global owner to guilleale22_coderhouse;
+```
