@@ -87,8 +87,11 @@ data = {
     "client_id": config["spotify"]["client_id"],
     "client_secret": config["spotify"]["client_secret"],
 }
-response_token = requests.post("https://accounts.spotify.com/api/token", data=data)
-token, status = chequeo_token_status(response_token)
+try:
+    response_token = requests.post("https://accounts.spotify.com/api/token", data=data)
+    token, status = chequeo_token_status(response_token)
+except:
+    print ("No se pudo obtener la key temporal")
 
 # Obtengo una lista automatica de IDs para los artistas de la playlist top 50 de argentina.
 # Gracias a la funcion artistas_in_playlist no tengo id duplicados.
@@ -104,13 +107,16 @@ headers = {
 params_playlist = {
     "fields": "tracks(items(track(artists(id))))",
 }
-response_playlist = requests.get(
-    "https://api.spotify.com/v1/playlists/37i9dQZEVXbMDoHDwVN2tF",
-    params=params_playlist,
-    headers=headers,
-)
-artistas_sin_duplicados = artistas_in_playlist(response_playlist.json())
-req_artistas = ajusto_largo_request(artistas_sin_duplicados)
+try:
+    response_playlist = requests.get(
+        "https://api.spotify.com/v1/playlists/37i9dQZEVXbMDoHDwVN2tF",
+        params=params_playlist,
+        headers=headers,
+    )
+    artistas_sin_duplicados = artistas_in_playlist(response_playlist.json())
+    req_artistas = ajusto_largo_request(artistas_sin_duplicados)
+except:
+    print("Hubo un error con la informacion de los artistas")
 
 # Obtencion de datos de los artistas ya ajustados al maximo de 50 y sin duplicar
 base_url = "https://api.spotify.com/v1"
@@ -120,8 +126,10 @@ endpoint_url = build_url(base_url, endpoint_artists)
 params_artist = {
     "ids": ",".join(req_artistas)
 }
-response_data = requests.get(endpoint_url, params=params_artist, headers=headers)
-
+try:
+    response_data = requests.get(endpoint_url, params=params_artist, headers=headers)
+except:
+    print("Error con la informacion de los artistas sin duplicados")
 # Separo los artistas para que me queden uno por fila con sus metadatos
 new = []
 for artists in response_data.json()["artists"]:
@@ -145,7 +153,9 @@ new_df["links"] = new_df["links"].apply(json.dumps)
 conn_str = build_conn_string(config_dir, "redshift")
 conn, engine = connect_to_db(conn_str)
 schema = "guilleale22_coderhouse"
-conn.execute(
+
+try:
+    conn.execute(
     f"""
         DROP TABLE IF EXISTS {schema}.artistas_top_50_global;
         CREATE TABLE {schema}.artistas_top_50_global (
@@ -157,14 +167,18 @@ conn.execute(
             links TEXT
         );
     """
-)
+    )
+except:
+    print("Error al conectar con la base de datos")
 
-
-new_df.to_sql(
-    name="artistas_top_50_global",
-    con=conn,
-    schema=schema,
-    if_exists="replace",
-    method="multi",
-    index=False,
-)
+try:
+    new_df.to_sql(
+        name="artistas_top_50_global",
+        con=conn,
+        schema=schema,
+        if_exists="replace",
+        method="multi",
+        index=False,
+    )
+except:
+    print("Error al crear la tabla en la base de datos")
