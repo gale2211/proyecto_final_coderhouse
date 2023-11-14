@@ -37,9 +37,6 @@ Un ejemplo de SQL para obtener la información de la tabla sería:
 
 select * from "data-engineer-database".guilleale22_coderhouse.artistas_top_50_global
 
-DISTKEY(followers)
-SORTKEY(popularity);
-
 ## Codigo DDL de la tabla
 
 

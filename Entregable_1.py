@@ -165,7 +165,9 @@ try:
             followers FLOAT,
             popularity INT,
             links TEXT
-        );
+        )
+        DISTKEY(followers)
+        SORTKEY(popularity);
     """
     )
 except:
