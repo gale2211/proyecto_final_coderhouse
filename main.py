@@ -7,6 +7,8 @@ import os
 from configparser import ConfigParser
 from pathlib import Path
 import sqlalchemy as sa
+from datetime import date, timedelta
+from datetime import datetime as dt
 
 # FUNCIONES UTILES
 
@@ -90,8 +92,8 @@ data = {
 try:
     response_token = requests.post("https://accounts.spotify.com/api/token", data=data)
     token, status = chequeo_token_status(response_token)
-except:
-    print ("No se pudo obtener la key temporal")
+except ValueError:
+    raise ValueError("Error en la obtención de la key temporal")
 
 # Obtengo una lista automatica de IDs para los artistas de la playlist top 50 de argentina.
 # Gracias a la funcion artistas_in_playlist no tengo id duplicados.
@@ -115,8 +117,8 @@ try:
     )
     artistas_sin_duplicados = artistas_in_playlist(response_playlist.json())
     req_artistas = ajusto_largo_request(artistas_sin_duplicados)
-except:
-    print("Hubo un error con la informacion de los artistas")
+except ValueError:
+    raise ValueError("Error en la obtención de la informacion de los artistas")
 
 # Obtencion de datos de los artistas ya ajustados al maximo de 50 y sin duplicar
 base_url = "https://api.spotify.com/v1"
@@ -128,8 +130,8 @@ params_artist = {
 }
 try:
     response_data = requests.get(endpoint_url, params=params_artist, headers=headers)
-except:
-    print("Error con la informacion de los artistas sin duplicados")
+except ValueError:
+    raise ValueError("Error con la informacion de los artistas sin duplicados")
 # Separo los artistas para que me queden uno por fila con sus metadatos
 new = []
 for artists in response_data.json()["artists"]:
@@ -139,14 +141,17 @@ for artists in response_data.json()["artists"]:
 df = pd.DataFrame(new)
 nuevos_nombres_columnas = {
     "external_urls": "links",
-    "id": "artist_id",
+    "id": "artists_id",
     "name": "artist_name",
 }
 df = df.rename(columns=nuevos_nombres_columnas)
 df["followers"] = df["followers"].apply(pd.Series)["total"]
-new_df = df[["artist_id", "artist_name", "genres", "followers", "popularity", "links"]]
+new_df = df[["artists_id", "artist_name", "genres", "followers", "popularity", "links"]]
 new_df["genres"] = new_df["genres"].apply(json.dumps)
 new_df["links"] = new_df["links"].apply(json.dumps)
+today = date.today()
+new_df["updated_at"] = today
+
 
 # DATA A REDSHIFT
 # CONEXION A LA BASE DE DATOS DE REDSHIFT
@@ -155,32 +160,32 @@ conn, engine = connect_to_db(conn_str)
 schema = "guilleale22_coderhouse"
 
 try:
-    conn.execute(
-    f"""
-        DROP TABLE IF EXISTS {schema}.artistas_top_50_global;
-        CREATE TABLE {schema}.artistas_top_50_global (
-            artists_id VARCHAR(250),
-            artist_name VARCHAR(250),
-            genres TEXT,
-            followers FLOAT,
-            popularity INT,
-            links TEXT
+    fecha_max = pd.read_sql_query('select max(updated_at)::date as max_date from guilleale22_coderhouse.artistas_top_50_global', conn)
+    fecha_max['max_date'] = pd.to_datetime(fecha_max['max_date']).dt.date
+    if today == fecha_max["max_date"][0]:
+        conn.execute(
+        f"""
+            delete from guilleale22_coderhouse.artistas_top_50_global where updated_at = current_date 
+        """
         )
-        DISTKEY(followers)
-        SORTKEY(popularity);
-    """
-    )
-except:
-    print("Error al conectar con la base de datos")
-
-try:
-    new_df.to_sql(
-        name="artistas_top_50_global",
-        con=conn,
-        schema=schema,
-        if_exists="replace",
-        method="multi",
-        index=False,
-    )
-except:
-    print("Error al crear la tabla en la base de datos")
+    
+        new_df.to_sql(
+            name="artistas_top_50_global",
+            con=conn,
+            schema=schema,
+            if_exists="append",
+            method="multi",
+            index=False,
+        )
+    else:
+        new_df.to_sql(
+            name="artistas_top_50_global",
+            con=conn,
+            schema=schema,
+            if_exists="append",
+            method="multi",
+            index=False,
+        )
+        
+except ValueError:
+    raise ValueError("Error actualización de base de datos")
