@@ -1,12 +1,12 @@
 # Introducción
 
-Para este proyecto final, se utilizó la información proveniente de la API de Spotify. La misma posee una base de datos crudos con toda la información sobre los artistas, canciones, audiolibros y podcasts. El objetivo es poder obtener una base de datos con la información de los artistas que se encuentran en la lista de top 50 global. Para ello, se utilizó un script de python que extrajo la información de la API, transformó los datos mediante la librería pandas y por último los cargó en una tabla de redshift. Ese código se puede encontrar en el archivo Entregable_1.py y las credenciales en el archivo config.ini. 
+Para este proyecto final, se utilizó la información proveniente de la API de Spotify. La misma posee una base de datos crudos con toda la información sobre los artistas, canciones, audiolibros y podcasts. El objetivo es poder obtener una base de datos con la información de los artistas que se encuentran en la lista de top 50 global. Para ello, se utilizó un script de python que extrajo la información de la API, transformó los datos mediante la librería pandas y por último los cargó en una tabla de redshift. Ese código se puede encontrar en el archivo main.py y las credenciales en el archivo config.ini. 
 
 # Files + Links
 
 Los **archivos utilizados** para esta entrega son:
 
- 1. Entregable_1.py: Contiene el código Python utilizado para la extracción y transformación de datos desde la API de Spotify.
+ 1. main.py: Contiene el código Python utilizado para la extracción y transformación de datos desde la API de Spotify.
  2. config.ini: Archivo de configuración que almacena las credenciales necesarias para acceder a la base de datos en Amazon Redshift y Spotify.
 
 Link de la API de spotify con su documentación:
@@ -29,6 +29,7 @@ El proceso de obtención y manipulación de datos se llevó a cabo en varias eta
  5. configparser
  6. pathlib
  7. sqlalchemy
+ 8. datetime
 
 # Tablas Generadas en Redshift
 Se utilizó la base de datos entregada por la cátedra de CoderHouse llamada "data-engineer-database". A su vez, el esquema donde se encuentra la tabla de los artistas del top 50 globlal se llama guilleale22_coderhouse.
@@ -54,6 +55,7 @@ CREATE TABLE IF NOT EXISTS guilleale22_coderhouse.artistas_top_50_global
 	,followers DOUBLE PRECISION   ENCODE RAW
 	,popularity BIGINT   ENCODE az64
 	,links VARCHAR(256)   ENCODE lzo
+	,updated_at DATE   ENCODE lzo
 )
 DISTSTYLE AUTO
 ;
