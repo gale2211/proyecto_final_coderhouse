@@ -1,14 +1,10 @@
 # Importo las librerias
-
 import requests
 import json
 import pandas as pd
-import os
 from configparser import ConfigParser
-from pathlib import Path
 import sqlalchemy as sa
-from datetime import date, timedelta
-from datetime import datetime as dt
+from datetime import date
 
 # FUNCIONES UTILES
 
