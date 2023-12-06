@@ -1,5 +1,6 @@
 # Importo las librerias
 import requests
+import logging
 import json
 import pandas as pd
 from configparser import ConfigParser
@@ -22,8 +23,9 @@ def obtengo_informacion_api():
     try:
         response_token = requests.post("https://accounts.spotify.com/api/token", data=data)
         token, status = chequeo_token_status(response_token)
-    except ValueError:
-        raise ValueError("Error en la obtención de la key temporal")
+        logging.info("Clave temporal conseguida exitosamente")
+    except Exception as e:
+        logging.error(f"Error en la obtención de la key temporal: {e}")    
 
     # Obtengo una lista automatica de IDs para los artistas de la playlist top 50 de argentina.
     # Gracias a la funcion artistas_in_playlist no tengo id duplicados.
@@ -47,9 +49,9 @@ def obtengo_informacion_api():
         )
         artistas_sin_duplicados = artistas_in_playlist(response_playlist.json())
         req_artistas = ajusto_largo_request(artistas_sin_duplicados)
-    except ValueError:
-        raise ValueError("Error en la obtención de la informacion de los artistas")
-
+        logging.info("Artistas conseguidos exitosamente")
+    except Exception as e:
+        logging.error(f"Error en la obtención de la informacion de los artistas: {e}")
     # Obtencion de datos de los artistas ya ajustados al maximo de 50 y sin duplicar
     base_url = "https://api.spotify.com/v1"
     endpoint_artists = "artists"
@@ -60,8 +62,9 @@ def obtengo_informacion_api():
     }
     try:
         response_data = requests.get(endpoint_url, params=params_artist, headers=headers)
-    except ValueError:
-        raise ValueError("Error con la informacion de los artistas sin duplicados")
+        logging.info("Artistas sin duplicados exitosamente")
+    except Exception as e:
+        logging.error(f"Error al conseguir los artistas sin duplicar: {e}")
     # Separo los artistas para que me queden uno por fila con sus metadatos
     new = []
     for artists in response_data.json()["artists"]:
@@ -121,9 +124,9 @@ def carga_datos_redshift(new_df):
                 method="multi",
                 index=False,
             )
-
-    except ValueError:
-        raise ValueError("Error actualización de base de datos")
+        logging.info("Datos cargados exitosamente")
+    except Exception as e:
+        logging.error(f"Error al cargar los datos en la base de datos: {e}")
 def main_func ():
     df = obtengo_informacion_api()
     new_df = limpio_data_frame(df)
