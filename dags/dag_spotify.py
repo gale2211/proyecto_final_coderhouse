@@ -16,7 +16,7 @@ with DAG(
     dag_id="dag_spotify",
     start_date=datetime(2023, 11, 28),
     catchup=False,
-    schedule_interval="0 * * * *",
+    schedule_interval="0 9 * * *",
     default_args=default_args
 ) as dag:
 
