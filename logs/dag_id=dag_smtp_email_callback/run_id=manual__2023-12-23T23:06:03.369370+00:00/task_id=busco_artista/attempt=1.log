@@ -1,0 +1,13 @@
+[2023-12-23T23:06:07.293+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: dag_smtp_email_callback.busco_artista manual__2023-12-23T23:06:03.369370+00:00 [queued]>
+[2023-12-23T23:06:07.296+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: dag_smtp_email_callback.busco_artista manual__2023-12-23T23:06:03.369370+00:00 [queued]>
+[2023-12-23T23:06:07.297+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 4
+[2023-12-23T23:06:07.302+0000] {taskinstance.py:1382} INFO - Executing <Task(PythonOperator): busco_artista> on 2023-12-23 23:06:03.369370+00:00
+[2023-12-23T23:06:07.304+0000] {standard_task_runner.py:57} INFO - Started process 224 to run task
+[2023-12-23T23:06:07.306+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'dag_smtp_email_callback', 'busco_artista', 'manual__2023-12-23T23:06:03.369370+00:00', '--job-id', '60', '--raw', '--subdir', 'DAGS_FOLDER/dag_email_callback.py', '--cfg-path', '/tmp/tmp2z3uxf0f']
+[2023-12-23T23:06:07.307+0000] {standard_task_runner.py:85} INFO - Job 60: Subtask busco_artista
+[2023-12-23T23:06:07.332+0000] {task_command.py:416} INFO - Running <TaskInstance: dag_smtp_email_callback.busco_artista manual__2023-12-23T23:06:03.369370+00:00 [running]> on host 4ce6e8a51ecd
+[2023-12-23T23:06:07.375+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='dag_smtp_email_callback' AIRFLOW_CTX_TASK_ID='busco_artista' AIRFLOW_CTX_EXECUTION_DATE='2023-12-23T23:06:03.369370+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2023-12-23T23:06:03.369370+00:00'
+[2023-12-23T23:06:07.555+0000] {python.py:194} INFO - Done. Returned value was: Taylor Swift
+[2023-12-23T23:06:07.576+0000] {taskinstance.py:1400} INFO - Marking task as SUCCESS. dag_id=dag_smtp_email_callback, task_id=busco_artista, execution_date=20231223T230603, start_date=20231223T230607, end_date=20231223T230607
+[2023-12-23T23:06:07.602+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 0
+[2023-12-23T23:06:07.615+0000] {taskinstance.py:2778} INFO - 0 downstream tasks scheduled from follow-on schedule check

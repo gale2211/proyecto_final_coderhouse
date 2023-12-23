@@ -1,0 +1,32 @@
+[2023-12-22T20:27:07.844+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: dag_spotify.main_func scheduled__2023-12-22T12:00:00+00:00 [queued]>
+[2023-12-22T20:27:07.855+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: dag_spotify.main_func scheduled__2023-12-22T12:00:00+00:00 [queued]>
+[2023-12-22T20:27:07.859+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 4
+[2023-12-22T20:27:07.883+0000] {taskinstance.py:1382} INFO - Executing <Task(PythonOperator): main_func> on 2023-12-22 12:00:00+00:00
+[2023-12-22T20:27:07.901+0000] {standard_task_runner.py:57} INFO - Started process 201 to run task
+[2023-12-22T20:27:07.909+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'dag_spotify', 'main_func', 'scheduled__2023-12-22T12:00:00+00:00', '--job-id', '37', '--raw', '--subdir', 'DAGS_FOLDER/dag_spotify.py', '--cfg-path', '/tmp/tmp9377_3ku']
+[2023-12-22T20:27:07.912+0000] {standard_task_runner.py:85} INFO - Job 37: Subtask main_func
+[2023-12-22T20:27:08.008+0000] {task_command.py:416} INFO - Running <TaskInstance: dag_spotify.main_func scheduled__2023-12-22T12:00:00+00:00 [running]> on host 4f104c25d3b4
+[2023-12-22T20:27:08.140+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='dag_spotify' AIRFLOW_CTX_TASK_ID='main_func' AIRFLOW_CTX_EXECUTION_DATE='2023-12-22T12:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2023-12-22T12:00:00+00:00'
+[2023-12-22T20:27:08.396+0000] {main.py:26} INFO - Clave temporal conseguida exitosamente
+[2023-12-22T20:27:08.956+0000] {main.py:52} INFO - Artistas conseguidos exitosamente
+[2023-12-22T20:27:09.469+0000] {main.py:65} INFO - Artistas sin duplicados exitosamente
+[2023-12-22T20:27:09.482+0000] {logging_mixin.py:154} WARNING - /opt/***/scripts/main.py:85 SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+[2023-12-22T20:27:09.484+0000] {logging_mixin.py:154} WARNING - /opt/***/scripts/main.py:86 SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+[2023-12-22T20:27:09.485+0000] {logging_mixin.py:154} WARNING - /opt/***/scripts/main.py:88 SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+[2023-12-22T20:27:19.979+0000] {main.py:127} INFO - Datos cargados exitosamente
+[2023-12-22T20:27:19.983+0000] {python.py:194} INFO - Done. Returned value was: None
+[2023-12-22T20:27:20.002+0000] {taskinstance.py:1400} INFO - Marking task as SUCCESS. dag_id=dag_spotify, task_id=main_func, execution_date=20231222T120000, start_date=20231222T202707, end_date=20231222T202720
+[2023-12-22T20:27:20.022+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 0
+[2023-12-22T20:27:20.037+0000] {taskinstance.py:2778} INFO - 0 downstream tasks scheduled from follow-on schedule check
